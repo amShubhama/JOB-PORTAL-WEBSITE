@@ -2,7 +2,12 @@ import express from 'express'
 import cors from 'cors'
 import 'dotenv/config'
 import connectDB from './config/db.js';
-import clerkWebhooks from './controller/webhooks.js';
+import companyRoutes from './routes/companyRoutes.js'
+import connectCloudinary from './config/cloudinary.js';
+import jobRoutes from './routes/jobRoutes.js';
+import userRoutes from './routes/userRoutes.js';
+
+
 
 //Initialize Express
 const app = express();
@@ -16,12 +21,17 @@ app.get("/",(req,res)=>{
     console.log("Working");
     res.send("Working");
 });
-app.post("/webhooks",clerkWebhooks)
+app.use('/api/company',companyRoutes);
+app.use('/api/jobs',jobRoutes);
+app.use('/api/users',userRoutes);
+
+
 
 //Port
-const PORT = process.env.PORT || 3000;
+const PORT = 5000;
 
 app.listen(PORT,async()=>{
     console.log(`app is listening on port ${PORT}`)
     await connectDB();
+    await connectCloudinary();
 });

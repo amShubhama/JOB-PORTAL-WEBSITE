@@ -30,6 +30,7 @@ const clerkWebhooks = async (req, res) => {
                 }
                 await User.create(userData);
                 res.json({});
+                console.log("User is created");
                 break;
             }
             case 'user.deleted': {
