@@ -1,6 +1,6 @@
-import React, { useActionState, useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Navbar from '../components/NavBar'
-import { assets, jobsApplied } from '../assets/assets'
+import { assets } from '../assets/assets'
 import moment from 'moment'
 import Footer from '../components/Footer'
 import { AppContex } from '../contex/AppContex'
@@ -10,21 +10,19 @@ const Application = () => {
 
   const [isEdit, setIsEdit] = useState(false)
   const [resume, setResume] = useState(null)
-  const [resumeLink, setResumeLink] = useState('')
 
-  const{backendUrl, userData, userToken, userApplications, fetchUserData} = useContext(AppContex)
+  const { backendUrl, userData, userToken, userApplications, fetchUserData, fetchUserApplications } = useContext(AppContex)
 
-  const updateResume = async()=>{
+  const updateResume = async () => {
     try {
       const formData = new FormData()
-      formData.append('resume',resume)
-      const {data} = await axios.post(backendUrl+'/api/users/update-resume',
+      formData.append('resume', resume)
+      const { data } = await axios.post(backendUrl + '/api/users/update-resume',
         formData,
-        {headers:{token:userToken}}
+        { headers: { token: userToken } }
       )
-      if(data.success){
+      if (data.success) {
         toast.success(data.message)
-        setResumeLink(data.link)
         await fetchUserData()
       } else {
         toast.error(data.message)
@@ -35,6 +33,11 @@ const Application = () => {
     setIsEdit(false)
     setResume(null)
   }
+  useEffect(() => {
+    if (userData) {
+      fetchUserApplications();
+    }
+  }, [userData])
 
   return (
     <>
@@ -54,7 +57,7 @@ const Application = () => {
               </>
               :
               <div className='flex gap-2'>
-                <a className='bg-blue-100 text-blue-600 px-4 py-2 rounded-lg' href={resumeLink}>
+                <a target='_blank' href={userData.resume} className='bg-blue-100 text-blue-600 px-4 py-2 rounded-lg'>
                   Resume
                 </a>
                 <button onClick={() => setIsEdit(true)} className='text-gray-500 border border-gray-300 rounded-lg px-4 py-2 cursor-pointer'>

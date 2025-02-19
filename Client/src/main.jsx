@@ -7,10 +7,10 @@ import { AppContexProvider } from './contex/AppContex.jsx'
 
 
 createRoot(document.getElementById('root')).render(
-    <BrowserRouter>
-      <AppContexProvider>
-        <App />
-      </AppContexProvider>
-    </BrowserRouter>
+  <BrowserRouter>
+    <AppContexProvider>
+      <App />
+    </AppContexProvider>
+  </BrowserRouter>
 
 )

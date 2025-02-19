@@ -13,27 +13,27 @@ const AddJob = () => {
   const [salary, setSalary] = useState(0)
 
 
-  const {backendUrl,companyToken} = useContext(AppContex)
+  const { backendUrl, companyToken } = useContext(AppContex)
 
   const editorRef = useRef(null)
   const quillRef = useRef(null)
 
-  const onSubmitHandler = async(e)=>{
+  const onSubmitHandler = async (e) => {
     e.preventDefault()
     try {
-      
+
       const description = quillRef.current.root.innerHTML
 
-      const {data} = await axios.post(backendUrl+'/api/company/post-job',{title,description,location,salary,category,level},
-        {headers:{token:companyToken}}
+      const { data } = await axios.post(backendUrl + '/api/company/post-job', { title, description, location, salary, category, level },
+        { headers: { token: companyToken } }
       )
 
-      if(data.success){
+      if (data.success) {
         toast.success(data.message)
         setTitle('')
         setSalary(0)
         quillRef.current.root.innerHTML = ""
-      } else{
+      } else {
         toast.error(data.message)
       }
     } catch (error) {

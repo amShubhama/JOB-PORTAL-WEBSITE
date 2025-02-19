@@ -19,7 +19,7 @@ export const registerCompany = async (req, res) => {
     }
 
     try {
-        const companyExists = await Company.findOne({email});
+        const companyExists = await Company.findOne({ email });
 
         if (companyExists) {
             return res.json({ success: false, message: 'Company already exists' })
@@ -100,13 +100,13 @@ export const getCompanyData = async (req, res) => {
     const company = req.company;
     try {
         res.json({
-            success:true,
+            success: true,
             company
         })
     } catch (error) {
         res.json({
-            success:false,
-            message:error.message
+            success: false,
+            message: error.message
         })
     }
 }
@@ -114,94 +114,123 @@ export const getCompanyData = async (req, res) => {
 //Post a new job
 export const postJob = async (req, res) => {
 
-    const {title, description,location,category,level,salary} = req.body;
+    const { title, description, location, category, level, salary } = req.body;
     const companyId = req.company._id;
-   if(!title && !description && !location && !category && !level && !salary){
-    return res.json({
-        success:true,
-        message:'Missing Details!'
-    })
-   }
-   try {
-    const  newJob = new Job({
-        title,
-        description,
-        location,
-        category,
-        level,
-        salary,
-        date: Date.now(),
-        companyId
-    })
-    await newJob.save();
-    return res.json({
-        success:true,
-        newJob,
-        message:'Job is successfully posted!'
-    })
-   } catch (error) {
-    return res.json({
-        success:false,
-        message:error.message
-    })
-   }
+    if (!title && !description && !location && !category && !level && !salary) {
+        return res.json({
+            success: true,
+            message: 'Missing Details!'
+        })
+    }
+    try {
+        const newJob = new Job({
+            title,
+            description,
+            location,
+            category,
+            level,
+            salary,
+            date: Date.now(),
+            companyId
+        })
+        await newJob.save();
+        return res.json({
+            success: true,
+            newJob,
+            message: 'Job is successfully posted!'
+        })
+    } catch (error) {
+        return res.json({
+            success: false,
+            message: error.message
+        })
+    }
 }
 
 // get company job applicants
 export const getCompanyJobApplicants = async (req, res) => {
+    try {
+        const companyId = req.company._id
 
+        // find job application for the user and populate related data
+        const applications = await JobApplication.find({ companyId })
+            .populate('userId', 'name image resume')
+            .populate('jobId', 'title location category level salary')
+            .exec()
+        return res.json({
+            success: true,
+            applications
+        })
+    } catch (error) {
+        res.json({ success: false, message: error.message })
+    }
 }
 
 //get company posted job
 export const getCompanyPostedJobs = async (req, res) => {
     try {
         const companyId = req.company._id;
-        const jobs = await Job.find({companyId});
+        const jobs = await Job.find({ companyId });
 
         //adding No. of applicants info in data
         const jobsData = await Promise.all(jobs.map(async (job) => {
-            const applicants = await JobApplication.find({jobId:job._id});
-            return {...job.toObject(),applicants:applicants.length}
+            const applicants = await JobApplication.find({ jobId: job._id });
+            return { ...job.toObject(), applicants: applicants.length }
         }))
-       
+
         return res.json({
-            success:true,
+            success: true,
             jobsData,
 
         })
     } catch (error) {
         res.json({
-            success:false,
-            message:error.message
+            success: false,
+            message: error.message
         })
     }
 }
 
 //change job application status
 export const changeJobApplicationStatus = async (req, res) => {
+    try {
+        const { id, status } = req.body;
 
+        //Find Job application and update status
+        await JobApplication.findOneAndUpdate({ _id: id }, { status })
+
+        res.json({
+            success: true,
+            message: 'Status changed'
+        })
+    } catch (error) {
+        return res.json({
+            success: false,
+            message: error.message
+        })
+    }
 }
 
 //change job visibility
-export const changeVisibility = async (req,res) => {
+export const changeVisibility = async (req, res) => {
     try {
-        const {id} = req.body;
+        const { id } = req.body;
         const companyId = req.company._id;
 
         const job = await Job.findById(id);
 
-        if(companyId.toString() === job.companyId.toString()){
+        if (companyId.toString() === job.companyId.toString()) {
             job.visible = !job.visible;
         }
         await job.save();
         res.json({
-            success:true,
+            success: true,
             job
         })
     } catch (error) {
         res.json({
-            success:false,
-            message:error.message,
+            success: false,
+            message: error.message,
         })
     }
 }

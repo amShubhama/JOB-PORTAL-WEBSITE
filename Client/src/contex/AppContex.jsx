@@ -19,7 +19,7 @@ export const AppContexProvider = (props) => {
     const [jobs, setJobs] = useState([])
 
     const [showRecruiterLogin, setShowRecruiterLogin] = useState(false)
-    const [ showUserLogin, setShowUserLogin ] = useState(false)
+    const [showUserLogin, setShowUserLogin] = useState(false)
 
     const [companyToken, setCompanyToken] = useState(null)
     const [userToken, setUserToken] = useState(null)
@@ -31,8 +31,8 @@ export const AppContexProvider = (props) => {
     //Function to fetch jobs
     const fetchJobs = async () => {
         try {
-            const { data } = await axios.get(backendUrl+'/api/jobs')
-            if(data.success){
+            const { data } = await axios.get(backendUrl + '/api/jobs')
+            if (data.success) {
                 setJobs(data.jobs)
             } else {
                 toast.error(data.message)
@@ -43,13 +43,13 @@ export const AppContexProvider = (props) => {
     }
 
     //function to fetch company data
-    const fetchCompanyData = async()=>{
+    const fetchCompanyData = async () => {
         try {
-            const {data} = await axios.get(backendUrl+'/api/company/company',{headers:{token:companyToken}})
-            if(data.success){
+            const { data } = await axios.get(backendUrl + '/api/company/company', { headers: { token: companyToken } })
+            if (data.success) {
                 setCompanyData(data.company)
                 console.log(data)
-            } else{
+            } else {
                 toast.error(data.message)
             }
         } catch (error) {
@@ -57,11 +57,11 @@ export const AppContexProvider = (props) => {
         }
     }
 
-   //function to fetch userdata
-    const fetchUserData = async()=>{
+    //function to fetch userdata
+    const fetchUserData = async () => {
         try {
-            const {data} = await axios.get(backendUrl+'/api/users/user',{headers:{token:userToken}})
-            if(data.success){
+            const { data } = await axios.get(backendUrl + '/api/users/user', { headers: { token: userToken } })
+            if (data.success) {
                 setUserData(data.user)
             } else {
                 toast.error(data.message)
@@ -73,12 +73,12 @@ export const AppContexProvider = (props) => {
     }
 
     //Function to fetch user's applied applications
-    const fetchUserApplications = async () =>{
+    const fetchUserApplications = async () => {
         try {
-            const {data} = await axios.get(backendUrl+'/api/users/applications',
-                {headers:{token:userToken}}
+            const { data } = await axios.get(backendUrl + '/api/users/applications',
+                { headers: { token: userToken } }
             )
-            if(data.success){
+            if (data.success) {
                 setUserApplications(data.application)
             } else {
                 toast.error(data.message)
@@ -93,26 +93,26 @@ export const AppContexProvider = (props) => {
 
         const storedCompanyToken = localStorage.getItem('companyToken')
         const storedUserToken = localStorage.getItem('userToken')
-        if(storedCompanyToken){
+        if (storedCompanyToken) {
             setCompanyToken(storedCompanyToken)
         }
-        if(storedUserToken){
+        if (storedUserToken) {
             setUserToken(storedUserToken)
         }
     }, [])
 
-    useEffect(()=>{
-        if(companyToken){
+    useEffect(() => {
+        if (companyToken) {
             fetchCompanyData()
         }
-    },[companyToken])
-    
-    useEffect(()=>{
-        if(userToken){
+    }, [companyToken])
+
+    useEffect(() => {
+        if (userToken) {
             fetchUserData()
             fetchUserApplications()
         }
-    },[userToken])
+    }, [userToken])
 
     const value = {
         setSearchFilter, searchFilter,
@@ -120,12 +120,12 @@ export const AppContexProvider = (props) => {
         jobs, setJobs,
         showRecruiterLogin, setShowRecruiterLogin,
         showUserLogin, setShowUserLogin,
-        companyData,setCompanyData,
+        companyData, setCompanyData,
         userToken, setUserToken,
         companyToken, setCompanyToken,
         userData, setUserData,
         backendUrl,
-        userApplications,setUserApplications,
+        userApplications, setUserApplications,
         fetchUserData,
         fetchUserApplications,
 

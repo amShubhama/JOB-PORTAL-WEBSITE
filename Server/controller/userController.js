@@ -1,13 +1,13 @@
 import User from "../models/User.js";
 import bcrypt from 'bcrypt';
-import {v2 as cloudinary} from 'cloudinary';
+import { v2 as cloudinary } from 'cloudinary';
 import generateToken from "../utils/generateToken.js";
 import JobApplication from "../models/jobApplication.js";
 import Job from "../models/Job.js";
 
 
 //register user
-export const registerUser = async (req,res)=>{
+export const registerUser = async (req, res) => {
     const { name, email, password } = req.body;
 
     const imageFile = req.file;
@@ -20,7 +20,7 @@ export const registerUser = async (req,res)=>{
     }
 
     try {
-        const userExists = await User.findOne({email});
+        const userExists = await User.findOne({ email });
 
         if (userExists) {
             return res.json({ success: false, message: 'User already exists' })
@@ -98,117 +98,117 @@ export const loginUser = async (req, res) => {
 
 
 //Get user data
-export const getUserData = async (req,res)=>{
+export const getUserData = async (req, res) => {
 
     const userId = req.user;
 
     try {
         const user = await User.findById(userId);
-        if(!user){
+        if (!user) {
             return res.json({
-                success:false,
-                message:'user not found'
+                success: false,
+                message: 'user not found'
             })
         }
         res.json({
-            success:true,
+            success: true,
             user
         })
     } catch (error) {
         res.json({
-            success:false,
-            message:error.message
+            success: false,
+            message: error.message
         })
     }
 }
 
 //Apply for a job
-export const applyForjob = async (req,res)=>{
+export const applyForjob = async (req, res) => {
 
-    const {jobId} = req.body;
+    const { jobId } = req.body;
     const userId = req.user._id;
-    
+
     try {
-        const isAlreadyApplied = await JobApplication.find({jobId,userId});
-        if(isAlreadyApplied.length>0){
+        const isAlreadyApplied = await JobApplication.find({ jobId, userId });
+        if (isAlreadyApplied.length > 0) {
             return res.json({
-                success:false,
-                message:'Already Applied'
+                success: false,
+                message: 'Already Applied'
             })
         }
         const jobData = await Job.findById(jobId);
-        if(!jobData){
+        if (!jobData) {
             return res.json({
-                success:false,
-                message:'Job not found'
+                success: false,
+                message: 'Job not found'
             })
         }
         await JobApplication.create({
-            companyId:jobData.companyId,
+            companyId: jobData.companyId,
             userId,
             jobId,
             date: Date.now()
         })
         res.json({
-            success:true,
-            message:'Applied successfully.'
+            success: true,
+            message: 'Applied successfully.'
         })
     } catch (error) {
         res.json({
-            success:false,
-            message:error.message
+            success: false,
+            message: error.message
         })
     }
 }
 
 //Get user applied applications
-export const getUserJobApplications = async(req,res)=>{
+export const getUserJobApplications = async (req, res) => {
 
     try {
-        const userId  = req.user._id;
-        const application = await JobApplication.find({userId})
-        .populate('companyId','name email image')
-        .populate('jobId','title description location category level salary')
-        .exec();
+        const userId = req.user._id;
+        const application = await JobApplication.find({ userId })
+            .populate('companyId', 'name email image')
+            .populate('jobId', 'title description location category level salary')
+            .exec();
 
-        if(!application){
+        if (!application) {
             return res.json({
-                success:false,
-                message:'No job applications found'
+                success: false,
+                message: 'No job applications found'
             })
         }
         return res.json({
-            success:true,
+            success: true,
             application
         })
     } catch (error) {
         return res.json({
-            success:false,
-            message:error.message
+            success: false,
+            message: error.message
         })
     }
 }
 
 //update user profile (resume)
-export const updateUserResume = async (req,res)=>{
+export const updateUserResume = async (req, res) => {
     try {
         const userId = req.user._id;
         const resumeFile = req.file;
         const userData = await User.findById(userId);
-        if(resumeFile){
+        if (resumeFile) {
             const resumeUpload = await cloudinary.uploader.upload(resumeFile.path);
             userData.resume = resumeUpload.secure_url;
         }
         await userData.save();
         return res.json({
-            success:true,
-            link:userData.resume,
-            message:'Resume Updated'
+            success: true,
+            link: userData.resume,
+            message: 'Resume Updated'
         })
     } catch (error) {
         return res.json({
-            success:false,
-            message:error.message
+            success: false,
+            message: error.message
         })
     }
 }

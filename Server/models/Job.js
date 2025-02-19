@@ -32,7 +32,7 @@ const jobSchema = new mongoose.Schema({
     },
     visible: {
         type: Boolean,
-        default:true
+        default: true
     },
     companyId: {
         type: mongoose.Schema.Types.ObjectId,
@@ -40,5 +40,5 @@ const jobSchema = new mongoose.Schema({
         required: true
     }
 });
-const Job = mongoose.model('Job',jobSchema);
+const Job = mongoose.model('Job', jobSchema);
 export default Job;

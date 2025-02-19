@@ -17,20 +17,20 @@ app.use(cors());
 app.use(express.json());
 
 //Routes
-app.get("/",(req,res)=>{
+app.get("/", (req, res) => {
     console.log("Working");
     res.send("Working");
 });
-app.use('/api/company',companyRoutes);
-app.use('/api/jobs',jobRoutes);
-app.use('/api/users',userRoutes);
+app.use('/api/company', companyRoutes);
+app.use('/api/jobs', jobRoutes);
+app.use('/api/users', userRoutes);
 
 
 
 //Port
 const PORT = 5000;
 
-app.listen(PORT,async()=>{
+app.listen(PORT, async () => {
     console.log(`app is listening on port ${PORT}`)
     await connectDB();
     await connectCloudinary();

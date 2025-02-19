@@ -4,21 +4,22 @@ import { useNavigate } from 'react-router-dom'
 import { AppContex } from '../contex/AppContex'
 import axios from 'axios'
 import { toast } from 'react-toastify'
+import Loading from '../components/Loading'
 const ManageJobs = () => {
   const navigate = useNavigate()
 
-  const [jobs,setJobs] = useState([])
+  const [jobs, setJobs] = useState(false)
 
-  const {backendUrl, companyToken} = useContext(AppContex)
+  const { backendUrl, companyToken } = useContext(AppContex)
 
   //function to fetch company job Applications data
   const fetchCompanyJobs = async () => {
     try {
-      const {data} = await axios.get(backendUrl+'/api/company/list-jobs',
-        {headers:{token:companyToken}}
+      const { data } = await axios.get(backendUrl + '/api/company/list-jobs',
+        { headers: { token: companyToken } }
       )
 
-      if(data.success){
+      if (data.success) {
         console.log(data)
         setJobs(data.jobsData.reverse())
       } else {
@@ -30,13 +31,13 @@ const ManageJobs = () => {
   }
 
   //Function to chnage visibility
-  const changeVisibility = async (id)=>{
+  const changeVisibility = async (id) => {
     try {
-      const {data} = await axios.post(backendUrl+'/api/company/change-visibility',
+      const { data } = await axios.post(backendUrl + '/api/company/change-visibility',
         { id },
-        { headers:{token:companyToken} }
+        { headers: { token: companyToken } }
       )
-      if(data.success){
+      if (data.success) {
         toast.success(data.message)
         fetchCompanyJobs()
       } else {
@@ -47,13 +48,17 @@ const ManageJobs = () => {
     }
   }
 
-  useEffect(()=>{
-    if(companyToken){
+  useEffect(() => {
+    if (companyToken) {
       fetchCompanyJobs()
     }
-  },[companyToken])
+  }, [companyToken])
 
-  return (
+  return jobs ? jobs.length === 0 ? (
+    <div className='flex items-center justify-center h-[70vh]'>
+      <p className='text-xl sm:text-2xl'>No Jobs Available or posted</p>
+    </div>
+  ) : (
     <div className='contaier p-4 max-w-5xl'>
       <div className='overflow-x-auto'>
         <table className='min-w-full bg-white border border-gray-200 max-sm:text-sm'>
@@ -76,7 +81,7 @@ const ManageJobs = () => {
                 <td className='py-2 px-4 border-b max-sm:hidden'>{job.location}</td>
                 <td className='py-2 px-4 border-b text-center'>{job.applicants}</td>
                 <td className='py-2 px-4 border-b'>
-                  <input onChange={()=>changeVisibility(job._id)} className='scale-125 ml-4' type="checkbox" checked={job.visible}/>
+                  <input onChange={() => changeVisibility(job._id)} className='scale-125 ml-4' type="checkbox" checked={job.visible} />
                 </td>
               </tr>
             ))}
@@ -87,7 +92,7 @@ const ManageJobs = () => {
         <button onClick={e => navigate('/dashboard/add-job')} className='bg-black text-white py-2 px-4 rounded'>Add new job</button>
       </div>
     </div>
-  )
+  ) : <Loading />
 }
 
 export default ManageJobs

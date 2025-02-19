@@ -3,13 +3,13 @@ import User from '../models/User.js';
 
 
 
-export const protectUser = async(req,res,next)=>{
+export const protectUser = async (req, res, next) => {
     const token = req.headers.token;
 
-    if(!token){
+    if (!token) {
         return res.json({
-            success:false,
-            message:'Not autorized, login again!'
+            success: false,
+            message: 'Not autorized, login again!'
         })
     }
 
@@ -19,8 +19,8 @@ export const protectUser = async(req,res,next)=>{
         next();
     } catch (error) {
         res.json({
-            success:false,
-            message:error.message
+            success: false,
+            message: error.message
         })
     }
 }

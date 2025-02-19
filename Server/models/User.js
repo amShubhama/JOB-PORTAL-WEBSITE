@@ -10,9 +10,9 @@ const userSchema = new mongoose.Schema({
         required: true,
         unique: true,
     },
-    password:{
+    password: {
         type: String,
-        required:true,
+        required: true,
     },
     image: {
         type: String,
@@ -20,7 +20,7 @@ const userSchema = new mongoose.Schema({
     },
     resume: {
         type: String,
-        default:''
+        default: ''
     }
 });
 const User = mongoose.model('User', userSchema);
