@@ -28,7 +28,7 @@ app.use('/api/users', userRoutes);
 
 
 //Port
-const PORT = 5000;
+const PORT = 8080;
 
 app.listen(PORT, async () => {
     console.log(`app is listening on port ${PORT}`)
