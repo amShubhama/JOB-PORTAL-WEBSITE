@@ -8,6 +8,7 @@ export default defineConfig({
   ],
   build: {
     rollupOptions: {
-      external: ['mongoose'], // Not needed if your frontend doesn't import mongoose
+      external: ['mongoose'],
     },
+  },
 })
