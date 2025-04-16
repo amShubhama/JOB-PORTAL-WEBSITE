@@ -6,4 +6,8 @@ export default defineConfig({
   plugins: [react(),
     tailwindcss(),
   ],
+  build: {
+    rollupOptions: {
+      external: ['mongoose'], // Not needed if your frontend doesn't import mongoose
+    },
 })
