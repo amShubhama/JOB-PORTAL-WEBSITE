@@ -51,7 +51,8 @@ job-portal/
 │ ├── pages/
 │ ├── services/
 │ └── App.js
-│
+
+
 ├── server/ # Express Backend
 │ ├── controllers/
 │ ├── models/
@@ -60,7 +61,6 @@ job-portal/
 │ └── server.js
 │
 └── README.md
----
 
 ## ⚙️ Installation & Setup
 
