@@ -3,7 +3,11 @@
 A full-featured **Job Portal Application** built using the **MERN stack (MongoDB, Express.js, React.js, Node.js)**. This platform allows employers to post jobs and candidates to search and apply for them — a complete recruitment and job-seeking solution.
 
 ---
+## Take a look
 
+live preview url : https://job-portal-website-1-hgsm.onrender.com/ 
+
+---
 ## 📌 Features
 
 ### 👤 Candidate Panel
