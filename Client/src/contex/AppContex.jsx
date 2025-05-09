@@ -7,7 +7,7 @@ export const AppContex = createContext()
 
 export const AppContexProvider = (props) => {
 
-    const backendUrl = "http://localhost:5000";
+    const backendUrl = "https://job-portal-website-77il.onrender.com";
 
     const [searchFilter, setSearchFilter] = useState({
         title: '',
