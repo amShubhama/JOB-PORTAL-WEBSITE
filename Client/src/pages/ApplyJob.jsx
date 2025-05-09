@@ -10,7 +10,6 @@ import JobCard from '../components/JobCard'
 import Footer from '../components/Footer'
 import axios from 'axios'
 import { toast } from 'react-toastify'
-import JobApplication from '../../../Server/models/jobApplication'
 const ApplyJob = () => {
   const { id } = useParams()
 
