@@ -86,9 +86,7 @@ PORT=5000
 MONGO_URI=your_mongodb_connection_string
 JWT_SECRET=your_jwt_secret
 🚀 Deployment
-Backend deployed on Render
-
-You can optionally deploy the frontend on Vercel or Netlify
+Frontend and Backend both are deployed on Render
 
 MongoDB hosted on MongoDB Atlas
 
